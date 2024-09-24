@@ -1,8 +1,17 @@
 import { Router } from "express";
-import { createEmployeeController } from "../controllers/employee.controller.js";
+import { createEmployeeController, deleteEmployee, editEmployee, getAllEmployees, getEmployeeById } from "../controllers/employee.controller.js";
+import { uplaod } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
-router.post("/create", createEmployeeController);
+router.post("/create", uplaod.single('image'), createEmployeeController);
+
+router.get("/list", getAllEmployees);
+
+router.get("/:id", getEmployeeById);
+
+router.put("/edit/:id", uplaod.none(), editEmployee);
+
+router.delete("/delete/:id", deleteEmployee);
 
 export default router;

@@ -1,35 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const EmployeeList = () => {
-    const [employees, setEmployees] = useState([
-        {
-            id: 1,
-            name: 'John Doe',
-            email: 'john@example.com',
-            mobile: '1234567890',
-            designation: 'Manager',
-            gender: 'Male',
-            courses: ['MCA'],
-            image: 'path-to-image',
-        },
-        {
-            id: 2,
-            name: 'Jane Smith',
-            email: 'jane@example.com',
-            mobile: '9876543210',
-            designation: 'HR',
-            gender: 'Female',
-            courses: ['BCA', 'BSc'],
-            image: 'path-to-image',
-        },
-    ]);
+
+    const [employees, setEmployees] = useState([]);
+
+    const fetchEmployees = async () => {
+        try {
+          const response = await fetch('http://localhost:8000/api/v1/emp/list');
+          if (!response.ok) {
+            throw new Error('Failed to fetch employees');
+          }
+          const data = await response.json();
+          setEmployees(data.employees);
+
+        } catch (err) {
+            console.error("Error while fetching Employee List\n", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchEmployees();
+    }, []);
 
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleDelete = (id) => {
-        const updatedEmployees = employees.filter(emp => emp.id !== id);
-        setEmployees(updatedEmployees);
+    const handleDelete = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/v1/emp/delete/${id}`, {
+                method: "DELETE",
+            });
+
+            if(!response.ok){
+                throw new Error("Error Deleting Employee");
+            }
+            
+            setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp._id !== id));
+            // fetchEmployees();
+        } catch (error) {
+            console.error("Error while deleting Employee\n", error);
+        }
     };
 
     const handleEdit = (id) => {
@@ -40,9 +50,9 @@ const EmployeeList = () => {
         setSearchTerm(event.target.value);
     };
 
-    const filteredEmployees = employees.filter(employee =>
-        employee.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredEmployees = employees.filter((employee) => {
+        return employee.fullName.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     return (
         <div className="container mx-auto max-w-[80%] p-4">
@@ -85,8 +95,8 @@ const EmployeeList = () => {
                 <tbody>
                     {filteredEmployees.length > 0 ? (
                         filteredEmployees.map((employee) => (
-                            <tr key={employee.id}>
-                                <td className="p-3 border">{employee.name}</td>
+                            <tr key={employee._id}>
+                                <td className="p-3 border">{employee.fullName}</td>
                                 <td className="p-3 border">{employee.email}</td>
                                 <td className="p-3 border">{employee.mobile}</td>
                                 <td className="p-3 border">{employee.designation}</td>
@@ -97,20 +107,20 @@ const EmployeeList = () => {
                                 <td className="p-3 border">
                                     <img
                                         src={employee.image}
-                                        alt={employee.name}
+                                        alt={employee.fullName}
                                         className="w-10 h-10 rounded-full"
                                     />
                                 </td>
                                 <td className="p-3 border">
                                     <Link
-                                        to="/editemployee"
-                                        onClick={() => handleEdit(employee.id)}
+                                        to={`/editemployee/${employee._id}`}
+                                        onClick={() => handleEdit(employee._id)}
                                         className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 mr-2"
                                     >
                                         Edit
                                     </Link>
                                     <button
-                                        onClick={() => handleDelete(employee.id)}
+                                        onClick={() => handleDelete(employee._id)}
                                         className="bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700"
                                     >
                                         Delete

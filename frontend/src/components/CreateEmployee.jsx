@@ -53,25 +53,24 @@ const CreateEmployee = () => {
     formData.course.forEach((course) => formDataObj.append('course', course));
     formDataObj.append('image', formData.image);
 
-    console.log(formData);
-    // try {
+    try {
     
-    //   const response = await fetch('http://localhost:8000/api/v1/emp/create', {
-    //     method: 'POST',
-    //     body: formDataObj,
-    //   });
+      const response = await fetch('http://localhost:8000/api/v1/emp/create', {
+        method: 'POST',
+        body: formDataObj,
+      });
 
-    //   if (!response.ok) {
-    //     throw new Error('Error creating employee');
-    //   }
+      if (!response.ok) {
+        throw new Error('Error creating employee');
+      }
 
-    //   const data = await response.json();
-    //   console.log('Employee created successfully', data);
+      const data = await response.json();
+      console.log('Employee created successfully', data);
 
-    //   navigate("/employeelist");
-    // } catch (error) {
-    //   console.error('Error creating employee', error);
-    // }
+      navigate("/employeelist");
+    } catch (error) {
+      console.error('Error creating employee', error);
+    }
   };
 
   return (

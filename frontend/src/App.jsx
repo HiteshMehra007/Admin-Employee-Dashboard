@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import CreateEmployee from './components/CreateEmployee';
 import EmployeeList from './components/EmployeeList';
 import NotFound from './components/NotFound';
+import { EditEmployeeChild } from './components/EditEmployeeChild';
 import { EditEmployee } from './components/EditEmployee';
 import { Home } from './components/Home';
 import Register from './components/Register';
@@ -42,7 +43,13 @@ const router = createBrowserRouter([
       },
       {
         path: "editemployee",
-        element: <EditEmployee />
+        element: <EditEmployee />,
+        children: [
+          {
+            path: "/editemployee/:id",
+            element: <EditEmployeeChild />
+          }
+        ]
       }
     ]
   },
