@@ -9,7 +9,7 @@ export const EditEmployeeChild = () => {
         mobile: '',
         designation: 'HR',
         gender: '',
-        course: [],
+        courses: [],
         image: null,
     });
 
@@ -28,7 +28,7 @@ export const EditEmployeeChild = () => {
                     mobile: result.mobile,
                     designation: result.designation,
                     gender: result.gender,
-                    course: result.courses,
+                    courses: result.courses,
                     image: null,
                 });
             } catch (error) {
@@ -45,9 +45,9 @@ export const EditEmployeeChild = () => {
         if (type === 'checkbox') {
             setFormData((prev) => ({
                 ...prev,
-                course: checked
-                    ? [...prev.course, value]
-                    : prev.course.filter((course) => course !== value),
+                courses: checked
+                    ? [...prev.courses, value]
+                    : prev.courses.filter((course) => course !== value),
             }));
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
@@ -70,7 +70,9 @@ export const EditEmployeeChild = () => {
         formDataObj.append('mobile', formData.mobile);
         formDataObj.append('designation', formData.designation);
         formDataObj.append('gender', formData.gender);
-        formData.course.forEach((course) => formDataObj.append('course', course));
+        formData.courses.forEach((course) => formDataObj.append('course', course));
+        formDataObj.append('courses', JSON.stringify(formData.courses));
+
         if (formData.image) {
             formDataObj.append('image', formData.image);
         }
@@ -182,10 +184,10 @@ export const EditEmployeeChild = () => {
                             <label className="inline-flex items-center mr-4">
                                 <input
                                     type="checkbox"
-                                    name="course"
+                                    name="courses"
                                     value="MCA"
                                     className="form-checkbox text-indigo-600"
-                                    checked={formData.course.includes('MCA')}
+                                    checked={formData.courses.includes('MCA')}
                                     onChange={handleInputChange}
                                 />
                                 <span className="ml-2">MCA</span>
@@ -193,10 +195,10 @@ export const EditEmployeeChild = () => {
                             <label className="inline-flex items-center mr-4">
                                 <input
                                     type="checkbox"
-                                    name="course"
+                                    name="courses"
                                     value="BCA"
                                     className="form-checkbox text-indigo-600"
-                                    checked={formData.course.includes('BCA')}
+                                    checked={formData.courses.includes('BCA')}
                                     onChange={handleInputChange}
                                 />
                                 <span className="ml-2">BCA</span>
@@ -204,10 +206,10 @@ export const EditEmployeeChild = () => {
                             <label className="inline-flex items-center">
                                 <input
                                     type="checkbox"
-                                    name="course"
+                                    name="courses"
                                     value="BSc"
                                     className="form-checkbox text-indigo-600"
-                                    checked={formData.course.includes('BSc')}
+                                    checked={formData.courses.includes('BSc')}
                                     onChange={handleInputChange}
                                 />
                                 <span className="ml-2">BSc</span>

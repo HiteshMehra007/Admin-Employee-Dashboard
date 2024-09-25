@@ -10,7 +10,7 @@ router.get("/list", getAllEmployees);
 
 router.get("/:id", getEmployeeById);
 
-router.put("/edit/:id", uplaod.none(), editEmployee);
+router.put("/edit/:id", uplaod.single('image'), editEmployee);
 
 router.delete("/delete/:id", deleteEmployee);
 

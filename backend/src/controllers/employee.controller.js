@@ -4,7 +4,6 @@ import { Employee } from "../models/employee.model.js";
 const createEmployeeController = async (req, res) => {
     try {
         const { name, email, mobile, designation, gender, course } = req.body;
-        console.log(name);
         
         const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!pattern.test(email)){
@@ -13,7 +12,7 @@ const createEmployeeController = async (req, res) => {
           })
         }
 
-        let imageLocalPath = req.file?.path; // Path to the uploaded file
+        let imageLocalPath = req.file?.path;
         
         const imagePath = await uploadToCloudinary(imageLocalPath);
 
@@ -60,10 +59,19 @@ const getAllEmployees = async (req, res) => {
 
 const editEmployee = async (req, res) => {
     try {
-      const { name, email, mobile, designation, gender, courses } = req.body;
+      let { name, email, mobile, designation, gender, courses } = req.body;
       const { id } = req.params;
+      const imagePath = req.file ? ('public/temp/' + req.file.filename) : null;
+      courses = JSON.parse(req.body.courses);
       
-      const updatedEmployee = await Employee.findByIdAndUpdate(id, { name, email, mobile, designation, gender, courses }, { new: true});
+      const imageObj = await uploadToCloudinary(imagePath);
+      const image = imageObj.url;
+
+      const updatedEmployee = await Employee.findByIdAndUpdate(id, 
+        { fullName: name, email, mobile, designation, gender, courses, image },
+        { new: true }
+      );
+
       if(!updatedEmployee){
         return res.status(400).json({error: "Employee Not found !!"});
       }
