@@ -1,7 +1,3 @@
-Here’s a sample `README.md` file for your **Admin Employee Dashboard** MERN project:
-
----
-
 # Admin Employee Dashboard (MERN)
 
 This project is a full-stack employee management system built using the MERN (MongoDB, Express, React, Node.js) stack. It provides administrators the ability to perform CRUD (Create, Read, Update, Delete) operations on employee data, manage employee information, and upload employee profile images.
@@ -94,5 +90,3 @@ This project is a full-stack employee management system built using the MERN (Mo
 - Implement authentication and authorization for secure admin access.
 - Add pagination for large datasets.
 - Enhanced file handling (e.g., resizing images).
-
-Feel free to adjust image paths and other details as per your specific project!
